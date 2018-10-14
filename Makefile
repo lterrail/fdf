@@ -6,25 +6,24 @@
 #    By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/16 13:56:16 by lterrail          #+#    #+#              #
-#    Updated: 2018/06/16 14:51:00 by lterrail         ###   ########.fr        #
+#    Updated: 2018/10/14 11:23:27 by lterrail         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= fdf
 
 SRC	=	main.c			\
-		drawer.c		\
-		functions.c		\
-		reader.c		\
-		get_next_line.c
+		parse.c			\
+		draw.c			\
+		exit.c			\
 
 OBJ		= $(addprefix ./obj/,$(SRC:.c=.o))
 
 CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror
+# CFLAGS	= -Wall -Wextra -Werror
 
 LIBFTA	= ./libft/libft.a
-LIBINCL = -I./libft
+LIBINCL = -I./libft/includes
 LIBLINK	= -L./libft -lft
 
 MLXA = ./miniLibX/mlx.a
