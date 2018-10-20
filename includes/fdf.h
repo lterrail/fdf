@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/16 14:03:53 by lterrail          #+#    #+#             */
-/*   Updated: 2018/10/14 13:29:22 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/10/20 18:48:04 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 
 # define WIDTH 1800
 # define HEIGHT 1200
-# define EDGE 400
+# define EDGE 300
 # define LIMIT_Z 200
 
 # define ERROR 0
@@ -47,6 +47,8 @@ typedef struct		s_fdf
 	int				**map;
 	int				nb_column;
 	int				nb_line;
+	int				xnext;
+	int				ynext;
 	int				xlen;
 	int				ylen;
 	int				x;

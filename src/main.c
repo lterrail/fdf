@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/16 13:54:41 by lterrail          #+#    #+#             */
-/*   Updated: 2018/10/14 14:04:59 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/10/20 18:48:19 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ void			ft_debugg(t_fdf *fdf)
 	ft_printf("name       [%s]\n", fdf->name);
 	ft_printf("nb_line    [%d]\n", fdf->nb_line);
 	ft_printf("nb_column  [%d]\n", fdf->nb_column);
-	ft_printf("{blue}xlen       [%d]{eoc}\n", fdf->xlen);
-	ft_printf("{blue}ylen       [%d]{eoc}\n", fdf->ylen);
 	while (j < fdf->nb_line)
 	{
 		i = 0;
@@ -43,14 +41,16 @@ static t_fdf	*init_fdf(char **av)
 	if (!(fdf = (t_fdf *)malloc(sizeof(t_fdf))))
 		return (NULL);
 	fdf->fd = 0;
-	// fdf->mlx = mlx_init();
+	fdf->mlx = mlx_init();
 	fdf->win = NULL;
 	fdf->nb_column = 0;
 	fdf->nb_line = 0;
 	fdf->xlen = 0;
-	fdf->x = EDGE;
-	fdf->y = EDGE;
-	fdf->ylen = 0;
+	fdf->xlen = 0;
+	fdf->xnext = 0;
+	fdf->ynext = 0;
+	fdf->x = 0;
+	fdf->y = 0;
 	fdf->map = 0;
 	fdf->name = av[1];
 	return (fdf);
