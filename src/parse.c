@@ -6,32 +6,13 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/12 14:10:23 by lterrail          #+#    #+#             */
-/*   Updated: 2018/10/14 12:46:12 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/10/23 14:57:38 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static int	ft_create_map(t_fdf *fdf)
-{
-	int		i;
-	int		**tmp_map;
-
-	i = 0;
-	if (!(tmp_map = (int **)malloc(sizeof(int *) * (fdf->nb_line + 1))))
-		return (ERROR_MALLOC);
-	while (i < fdf->nb_line)
-	{
-		tmp_map[i] = fdf->map[i];
-		i++;
-	}
-	if (fdf->map)
-		free(fdf->map);
-	fdf->map = tmp_map;
-	return (SUCCESS);
-}
-
-static int	ft_count_int(t_fdf *fdf, char *str)
+static int		ft_count_int(t_fdf *fdf, char *str)
 {
 	int		i;
 	int		count;
@@ -60,7 +41,48 @@ static int	ft_count_int(t_fdf *fdf, char *str)
 	return (count);
 }
 
-static int	ft_load_map(t_fdf *fdf, char *tmp)
+static int		ft_create_map(t_fdf *fdf)
+{
+	int		i;
+	int		**tmp_map;
+
+	i = 0;
+	if (!(tmp_map = (int **)malloc(sizeof(int *) * (fdf->nb_line + 1))))
+		return (ERROR_MALLOC);
+	while (i < fdf->nb_line)
+	{
+		tmp_map[i] = fdf->map[i];
+		i++;
+	}
+	if (fdf->map)
+		free(fdf->map);
+	fdf->map = tmp_map;
+	return (SUCCESS);
+}
+
+static int		ft_create_tabyx(t_fdf *fdf)
+{
+	int		i;
+	int		j;
+
+	if (!(fdf->coordx = (int **)malloc(sizeof(int *) * (fdf->nb_line + 1))))
+		return (ERROR_MALLOC);
+	if (!(fdf->coordy = (int **)malloc(sizeof(int *) * (fdf->nb_line + 1))))
+		return (ERROR_MALLOC);
+	i = -1;
+	while (++i < fdf->nb_line)
+	{
+		if (!(fdf->coordx[i] = malloc(sizeof(int) * fdf->nb_column + 1)))
+			return (ERROR_MALLOC);
+		if (!(fdf->coordy[i] = malloc(sizeof(int) * fdf->nb_column + 1)))
+			return (ERROR_MALLOC);
+		fdf->coordx[i][fdf->nb_column + 1] = 0;
+		fdf->coordy[i][fdf->nb_column + 1] = 0;
+	}
+	return (SUCCESS);
+}
+
+static int		ft_load_map(t_fdf *fdf, char *tmp)
 {
 	int		deci;
 	int		ptr;
@@ -73,8 +95,6 @@ static int	ft_load_map(t_fdf *fdf, char *tmp)
 	while (deci < fdf->nb_column)
 	{
 		value = ft_atoi(&tmp[ptr]);
-		if (value > LIMIT_Z || value < -LIMIT_Z)
-			return (ERROR_LIMIT_INT);
 		fdf->map[fdf->nb_line][deci] = value;
 		deci++;
 		while (tmp[ptr] && (tmp[ptr] == '-' || (tmp[ptr] >= '0'
@@ -86,7 +106,7 @@ static int	ft_load_map(t_fdf *fdf, char *tmp)
 	return (SUCCESS);
 }
 
-extern int	ft_parse(t_fdf *fdf)
+extern int		ft_parse(t_fdf *fdf)
 {
 	char	*line;
 	int		error;
@@ -112,5 +132,7 @@ extern int	ft_parse(t_fdf *fdf)
 		fdf->nb_line++;
 		free(line);
 	}
+	if (!(ft_create_tabyx(fdf)))
+		return (ERROR_MALLOC);
 	return (SUCCESS);
 }

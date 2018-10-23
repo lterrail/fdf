@@ -6,85 +6,76 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/12 15:23:19 by lterrail          #+#    #+#             */
-/*   Updated: 2018/10/20 18:54:18 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/10/23 17:45:57 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static int		ft_draw_one_dash_x(t_fdf *fdf)
+static void		init_draw_line(t_fdf *fdf, int x, int y, t_color *color)
 {
-	while (fdf->x < fdf->xnext)
+	t_next	next;
+
+	next.xdest = fdf->coordx[y][x];
+	next.ydest = fdf->coordy[y][x];
+	if (x != 0 && y == 0)
 	{
-		mlx_pixel_put(fdf->mlx, fdf->win, fdf->x, fdf->y, 0xFFFFFF);
-		fdf->x++;
+		next.xsrc = fdf->coordx[y][x - 1];
+		next.ysrc = fdf->coordy[y][x - 1];
+		draw_line(fdf->img, &next, color);
 	}
-	return (SUCCESS);
+	if (x == 0 && y != 0)
+	{
+		next.xsrc = fdf->coordx[y - 1][x];
+		next.ysrc = fdf->coordy[y - 1][x];
+		draw_line(fdf->img, &next, color);
+	}
+	else if (x != 0 && y != 0)
+	{
+		next.xsrc = fdf->coordx[y][x - 1];
+		next.ysrc = fdf->coordy[y][x - 1];
+		draw_line(fdf->img, &next, color);
+		next.xsrc = fdf->coordx[y - 1][x];
+		next.ysrc = fdf->coordy[y - 1][x];
+		draw_line(fdf->img, &next, color);
+	}
 }
 
-static int		ft_draw_one_dash_y(t_fdf *fdf)
+static void		define_coord_xy(t_fdf *fdf, int x, int y)
 {
-	while (fdf->y < fdf->ynext)
-	{
-		mlx_pixel_put(fdf->mlx, fdf->win, fdf->x, fdf->y, 0xFFFFFF);
-		fdf->y++;
-	}
-	return (SUCCESS);
-}
+	float		coord_x;
+	float		coord_y;
+	float		angle_x;
+	float		angle_y;
+	t_color		color;
 
-static int		ft_draw_one_line_x(t_fdf *fdf)
-{
-	int		i;
-
-	i = 1;
-	while (i < fdf->nb_column)
-	{
-		ft_draw_one_dash_x(fdf);
-		fdf->xnext += fdf->xlen;
-		i++;
-	}
-	return (SUCCESS);
-}
-
-static int		ft_draw_one_line_y(t_fdf *fdf)
-{
-	int		i;
-
-	i = 1;
-	while (i < fdf->nb_line)
-	{
-		ft_draw_one_dash_y(fdf);
-		fdf->ynext += fdf->ylen;
-		i++;
-	}
-	return (SUCCESS);
+	ft_color(fdf, &color, x, y);
+	angle_x = angle(fdf, x, y, 1);
+	angle_y = angle(fdf, x, y, 0);
+	coord_x = coord(fdf, angle_x, angle_y, 1);
+	coord_y = coord(fdf, angle_x, angle_y, 0);
+	coord_y -= ((fdf->size / 2 * fdf->map[y][x]) * fdf->alti);
+	fdf->coordx[y][x] = coord_x + fdf->move_x;
+	fdf->coordy[y][x] = coord_y + fdf->move_y;
+	init_draw_line(fdf, x, y, &color);
 }
 
 extern int 		ft_draw(t_fdf *fdf)
 {
-	int		i;
+	int		x;
+	int		y;
 
-	fdf->xlen = (WIDTH - EDGE * 3) / (fdf->nb_column - 1);
-	fdf->ylen = (HEIGHT - EDGE * 3) / (fdf->nb_line - 1);
-	fdf->win = mlx_new_window(fdf->mlx, WIDTH, HEIGHT, fdf->name);
-	i = 0;
-	while (i < fdf->nb_line)
+	y = 0;
+	while (y < fdf->nb_line)
 	{
-		fdf->y = EDGE + fdf->ylen * i;
-		fdf->x = EDGE;
-		fdf->xnext = fdf->x + fdf->xlen;
-		ft_draw_one_line_x(fdf);
-		i++;
+		x = 0;
+		while (x < fdf->nb_column)
+		{
+			define_coord_xy(fdf, x, y);
+			x++;
+		}
+		y++;
 	}
-	i = 0;
-	while (i < fdf->nb_column)
-	{
-		fdf->x = EDGE + fdf->xlen * i;
-		fdf->y = EDGE;
-		fdf->ynext = fdf->y + fdf->ylen;
-		ft_draw_one_line_y(fdf);
-		i++;
-	}
-	mlx_loop(fdf->mlx);
+	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img->img, 0, 0);
 	return (SUCCESS);
 }

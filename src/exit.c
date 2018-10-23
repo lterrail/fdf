@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/14 11:23:36 by lterrail          #+#    #+#             */
-/*   Updated: 2018/10/14 12:18:54 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/10/21 15:28:15 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void		ft_error(int error)
 {
 	if (error == ERROR_MALLOC)
-		ft_printf("{red}ERROR_MALLOC{eoc}\n");
+		ft_printf("{red}ERROR_MALLOC_FAILED{eoc}\n");
 	else if (error == ERROR_BAD_CHAR)
 		ft_printf("{red}ERROR_BAD_CHAR{eoc}\n");
 	else if (error == ERROR_LIMIT_INT)
@@ -26,6 +26,8 @@ static void		ft_error(int error)
 		ft_printf("{red}Usage no file : ./fdf {file}{eoc}\n");
 	else if (error == ERROR_TOO_MANY_FILES)
 		ft_printf("{red}Usage too many files : ./fdf {file}{eoc}\n");
+	else if (error == ERROR_OPEN)
+		ft_printf("{red}ERROR_OPEN_FAILED{eoc}\n");
 }
 
 void			ft_exit(t_fdf *fdf, int error)
@@ -42,6 +44,9 @@ void			ft_exit(t_fdf *fdf, int error)
 	}
 	if (fdf->map)
 		free(fdf->map);
-	free(fdf);
+	if (fdf->img)
+		free(fdf->img);
+	if (fdf)
+		free(fdf);
 	exit(0);
 }

@@ -6,7 +6,7 @@
 #    By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/16 13:56:16 by lterrail          #+#    #+#              #
-#    Updated: 2018/10/14 11:23:27 by lterrail         ###   ########.fr        #
+#    Updated: 2018/10/23 18:13:12 by lterrail         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,14 @@ NAME	= fdf
 SRC	=	main.c			\
 		parse.c			\
 		draw.c			\
+		key.c			\
+		new_image.c		\
+		clear_img.c		\
+		draw_line.c		\
+		rotation.c		\
+		color.c			\
+		lib_color.c		\
+		lib_color2.c	\
 		exit.c			\
 
 OBJ		= $(addprefix ./obj/,$(SRC:.c=.o))
