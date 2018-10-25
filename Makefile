@@ -6,29 +6,30 @@
 #    By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/16 13:56:16 by lterrail          #+#    #+#              #
-#    Updated: 2018/10/23 18:13:12 by lterrail         ###   ########.fr        #
+#    Updated: 2018/10/25 15:20:24 by lterrail         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= fdf
 
-SRC	=	main.c			\
-		parse.c			\
-		draw.c			\
-		key.c			\
-		new_image.c		\
-		clear_img.c		\
-		draw_line.c		\
-		rotation.c		\
-		color.c			\
-		lib_color.c		\
-		lib_color2.c	\
-		exit.c			\
+SRC	=	main.c						\
+		parse.c						\
+		draw.c						\
+		key.c						\
+		new_image.c					\
+		clear_img.c					\
+		draw_line.c					\
+		rotation.c					\
+		color.c						\
+		lib_color/lib_color.c		\
+		lib_color/lib_color2.c		\
+		display_usage.c				\
+		exit.c						\
 
 OBJ		= $(addprefix ./obj/,$(SRC:.c=.o))
 
 CC		= gcc
-# CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror
 
 LIBFTA	= ./libft/libft.a
 LIBINCL = -I./libft/includes
@@ -42,6 +43,7 @@ all: obj $(LIBFTA) $(MLXA) $(NAME)
 
 obj:
 	mkdir -p ./obj/
+	mkdir -p ./obj/lib_color/
 
 ./obj/%.o:./src/%.c
 	$(CC) $(CFLAGS) $(LIBINCL) $(MLXINCL) -Iincludes -o $@ -c $<

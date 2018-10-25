@@ -1,26 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   new_image.c                                        :+:      :+:    :+:   */
+/*   ft_bigger_than_integer.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/21 15:18:29 by lterrail          #+#    #+#             */
-/*   Updated: 2018/10/25 12:02:38 by lterrail         ###   ########.fr       */
+/*   Created: 2018/10/25 18:22:31 by lterrail          #+#    #+#             */
+/*   Updated: 2018/10/25 20:23:41 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "libft.h"
 
-t_img		*ft_new_image(void *mlx, int width, int height)
+int		ft_bigger_than_integer(char *p, int i)
 {
-	t_img	*img;
+	int		j;
 
-	img = (t_img *)malloc(sizeof(t_img));
-	if (img == NULL)
-		return (NULL);
-	img->img = mlx_new_image(mlx, width, height);
-	img->data = mlx_get_data_addr(img->img, &(img->bpp),
-			&(img->size_line), &(img->endian));
-	return (img);
+	j = 0;
+	if (i > 10)
+		return (0);
+	else if (i == 10)
+	{
+		if (p[0] == '-')
+			j++;
+		while (p[j] >= '0' && p[j] <= '9')
+			j++;
+	}
+	if ((p[0] == '-' && j != i + 1) || (p[0] != '-' && j != i))
+		return (0);
+	return (1);
 }

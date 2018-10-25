@@ -6,13 +6,13 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/14 11:23:36 by lterrail          #+#    #+#             */
-/*   Updated: 2018/10/21 15:28:15 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/10/25 21:00:52 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void		ft_error(int error)
+void			ft_error(int error)
 {
 	if (error == ERROR_MALLOC)
 		ft_printf("{red}ERROR_MALLOC_FAILED{eoc}\n");
@@ -28,25 +28,45 @@ static void		ft_error(int error)
 		ft_printf("{red}Usage too many files : ./fdf {file}{eoc}\n");
 	else if (error == ERROR_OPEN)
 		ft_printf("{red}ERROR_OPEN_FAILED{eoc}\n");
+	else if (error == ERROR_NO_DATA)
+		ft_printf("{red}ERROR_NO_DATA{eoc}\n");
+	exit(0);
+}
+
+static void		ft_free(t_fdf *fdf)
+{
+	if (fdf->map)
+		free(fdf->map);
+	if (fdf->coordx)
+		free(fdf->coordx);
+	if (fdf->coordy)
+		free(fdf->coordy);
+	if (fdf->color)
+		free(fdf->color);
 }
 
 void			ft_exit(t_fdf *fdf, int error)
 {
 	int		i;
 
-	i = 0;
-	if (error < 0)
-		ft_error(error);
-	while (i < fdf->nb_line)
-	{
-		free(fdf->map[i]);
-		i++;
-	}
+	i = -1;
 	if (fdf->map)
-		free(fdf->map);
-	if (fdf->img)
-		free(fdf->img);
+		while (fdf->map[++i] && i < fdf->nb_line)
+			free(fdf->map[i]);
+	i = -1;
+	if (fdf->coordx)
+		while (fdf->coordx[++i] && i < fdf->nb_line)
+			free(fdf->coordx[i]);
+	i = -1;
+	if (fdf->coordy)
+		while (fdf->coordy[++i] && i < fdf->nb_line)
+			free(fdf->coordy[i]);
+	ft_free(fdf);
 	if (fdf)
+	{
+		mlx_destroy_image(fdf->mlx, fdf->img);
+		mlx_destroy_window(fdf->mlx, fdf->win);
 		free(fdf);
-	exit(0);
+	}
+	ft_error(error);
 }

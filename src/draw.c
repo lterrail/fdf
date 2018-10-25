@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/12 15:23:19 by lterrail          #+#    #+#             */
-/*   Updated: 2018/10/23 17:45:57 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/10/25 21:01:18 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,8 @@ static void		define_coord_xy(t_fdf *fdf, int x, int y)
 	float		coord_y;
 	float		angle_x;
 	float		angle_y;
-	t_color		color;
 
-	ft_color(fdf, &color, x, y);
+	ft_color(fdf, fdf->color, x, y);
 	angle_x = angle(fdf, x, y, 1);
 	angle_y = angle(fdf, x, y, 0);
 	coord_x = coord(fdf, angle_x, angle_y, 1);
@@ -57,10 +56,10 @@ static void		define_coord_xy(t_fdf *fdf, int x, int y)
 	coord_y -= ((fdf->size / 2 * fdf->map[y][x]) * fdf->alti);
 	fdf->coordx[y][x] = coord_x + fdf->move_x;
 	fdf->coordy[y][x] = coord_y + fdf->move_y;
-	init_draw_line(fdf, x, y, &color);
+	init_draw_line(fdf, x, y, fdf->color);
 }
 
-extern int 		ft_draw(t_fdf *fdf)
+int				ft_draw(t_fdf *fdf)
 {
 	int		x;
 	int		y;
@@ -77,5 +76,6 @@ extern int 		ft_draw(t_fdf *fdf)
 		y++;
 	}
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img->img, 0, 0);
+	ft_display_usage(fdf);
 	return (SUCCESS);
 }

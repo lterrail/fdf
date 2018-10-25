@@ -6,7 +6,7 @@
 #    By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/05 16:05:37 by lterrail          #+#    #+#              #
-#    Updated: 2018/09/23 18:27:03 by lterrail         ###   ########.fr        #
+#    Updated: 2018/10/25 18:23:21 by lterrail         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -103,7 +103,8 @@ SRCS = 		ft_atoi.c			\
 			ft_count_char.c		\
 			ft_buble_sort_tab.c	\
 			ft_putnbr_base.c	\
-			ft_tablen.c
+			ft_tablen.c			\
+			ft_bigger_than_integer.c \
 
 SRCS	+=	$(addprefix ft_printf/, $(FT_PRINTF_SRCS))
 

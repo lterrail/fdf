@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/22 13:07:59 by lterrail          #+#    #+#             */
-/*   Updated: 2018/10/23 18:39:54 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/10/25 21:15:58 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,61 +19,60 @@ static void		draw_pixel(t_img *img, int x, int y, t_color *color)
 	img->data[(x * (img->bpp / 8)) + (y * img->size_line) + 2] = color->r;
 }
 
-
-static void		dy_dx(t_img *img, t_color *color, t_line *line)
+static void		dy_dx(t_img *img, t_color *color, t_pt *pt)
 {
-	line->cumul = 0;
-	while (line->i < line->dy)
+	pt->cumul = 0;
+	while (pt->i < pt->dy)
 	{
-		line->y += line->yincr;
-		line->cumul += line->dx;
-		if (line->cumul >= line->dy)
+		pt->y += pt->yincr;
+		pt->cumul += pt->dx;
+		if (pt->cumul >= pt->dy)
 		{
-			line->cumul -= line->dy;
-			line->x += line->xincr;
+			pt->cumul -= pt->dy;
+			pt->x += pt->xincr;
 		}
-		if ((line->x >= 0 && line->x <= WIDTH - 1) &&
-			(line->y >= 1 && line->y <= HEIGHT - 1))
-			draw_pixel(img, line->x, line->y, color);
-		line->i++;
+		if ((pt->x >= 0 && pt->x <= WIDTH - 1) &&
+			(pt->y >= 1 && pt->y <= HEIGHT - 1))
+			draw_pixel(img, pt->x, pt->y, color);
+		pt->i++;
 	}
 }
 
-static void		dx_dy(t_img *img, t_color *color, t_line *line)
+static void		dx_dy(t_img *img, t_color *color, t_pt *pt)
 {
-	line->cumul = 0;
-	while (line->i < line->dx)
+	pt->cumul = 0;
+	while (pt->i < pt->dx)
 	{
-		line->x += line->xincr;
-		line->cumul += line->dy;
-		if (line->cumul >= line->dx)
+		pt->x += pt->xincr;
+		pt->cumul += pt->dy;
+		if (pt->cumul >= pt->dx)
 		{
-			line->cumul -= line->dx;
-			line->y += line->yincr;
+			pt->cumul -= pt->dx;
+			pt->y += pt->yincr;
 		}
-		if ((line->x >= 0 && line->x <= WIDTH - 1) &&
-			(line->y >= 1 && line->y <= HEIGHT - 1))
-			draw_pixel(img, line->x, line->y, color);
-		line->i++;
+		if ((pt->x >= 0 && pt->x <= WIDTH - 1) &&
+			(pt->y >= 1 && pt->y <= HEIGHT - 1))
+			draw_pixel(img, pt->x, pt->y, color);
+		pt->i++;
 	}
 }
 
 int				draw_line(t_img *img, t_next *next, t_color *color)
 {
-	t_line	line;
+	t_pt	pt;
 
-	line.x = next->xsrc;
-	line.y = next->ysrc;
-	line.dx = next->xdest - next->xsrc;
-	line.dy = next->ydest - next->ysrc;
-	line.xincr = (line.dx > 0) ? 1 : -1;
-	line.yincr = (line.dy > 0) ? 1 : -1;
-	line.dx = abs(line.dx);
-	line.dy = abs(line.dy);
-	line.i = 0;
-	if (line.dx > line.dy)
-		dx_dy(img, color, &line);
+	pt.x = next->xsrc;
+	pt.y = next->ysrc;
+	pt.dx = next->xdest - next->xsrc;
+	pt.dy = next->ydest - next->ysrc;
+	pt.xincr = (pt.dx > 0) ? 1 : -1;
+	pt.yincr = (pt.dy > 0) ? 1 : -1;
+	pt.dx = abs(pt.dx);
+	pt.dy = abs(pt.dy);
+	pt.i = 0;
+	if (pt.dx > pt.dy)
+		dx_dy(img, color, &pt);
 	else
-		dy_dx(img, color, &line);
+		dy_dx(img, color, &pt);
 	return (SUCCESS);
 }
